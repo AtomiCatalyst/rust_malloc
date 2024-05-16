@@ -10,8 +10,9 @@ static MAX_ARENA_SIZE: usize = 0x7FFFFFFF;
 
 fn main() {
 
-    let result = RustMalloc::init(32768);
-    
+    let resu = RustMalloc::init(32768).unwrap();
+    println!("Success! {:?} {:?}", resu.arena_ptr, resu.free_list);
+    resu.destroy();
 }
 
 #[derive(Debug)]
@@ -100,6 +101,11 @@ impl RustMalloc<'_> {
         
         Ok(malloc)
     }
+
+    fn destroy(self) {
+        drop(self.arena_ptr) //calls into function and then drops itself
+    }
+
 }
 
 
